@@ -1,0 +1,42 @@
+{
+    "day1": {
+        "optimizer": "adam",
+        "dropout": 0.1,
+        "full_density": true,
+        "twice": true,
+        "density": 230,
+        "activation": "softplus",
+        "lstmsize": 150
+    },
+    "day2": {
+        "lstmsize": 126,
+        "density": 154,
+        "optimizer": "adam",
+        "full_density": true,
+        "activation": "relu",
+        "twice": false
+    },
+    "day3": {
+        "lstmsize": 170,
+        "activation": "selu",
+        "twice": false,
+        "density": 200,
+        "optimizer": "adam"
+    },
+    "day4": {
+        "density": 166,
+        "activation": "relu",
+        "twice": false,
+        "optimizer": "adam",
+        "lstmsize": 180,
+        "full_density": true
+    },
+    "day5": {
+        "twice": true,
+        "lstmsize": 132,
+        "full_density": true,
+        "density": 148,
+        "activation": "elu",
+        "optimizer": "adam"
+    }
+}
