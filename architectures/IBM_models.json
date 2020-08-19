@@ -1,42 +1,47 @@
 {
     "day1": {
-        "optimizer": "adam",
+        "lstmsize": 178,
+        "density": 164,
+        "twice": true,
         "dropout": 0.1,
         "full_density": true,
-        "twice": true,
-        "density": 230,
-        "activation": "softplus",
-        "lstmsize": 150
+        "activation": "elu",
+        "shuffle": true,
+        "optimizer": "adam",
     },
     "day2": {
-        "lstmsize": 126,
-        "density": 154,
-        "optimizer": "adam",
-        "full_density": true,
+        "density": 222,
+        "shuffle": true,
         "activation": "relu",
-        "twice": false
+        "twice": false,
+        "lstmsize": 138,
+        "optimizer": "adam",
     },
     "day3": {
-        "lstmsize": 170,
-        "activation": "selu",
-        "twice": false,
-        "density": 200,
-        "optimizer": "adam"
+        "density": 186,
+        "activation": "softsign",
+        "twice": true,
+        "full_density": true,
+        "lstmsize": 158,
+        "shuffle": true,
+        "optimizer": "adam",
     },
     "day4": {
-        "density": 166,
+        "lstmsize": 118,
         "activation": "relu",
-        "twice": false,
         "optimizer": "adam",
-        "lstmsize": 180,
-        "full_density": true
+        "shuffle": true,
+        "density": 98,
+        "twice": false,
     },
     "day5": {
+        "lstmsize": 178,
         "twice": true,
-        "lstmsize": 132,
         "full_density": true,
-        "density": 148,
-        "activation": "elu",
-        "optimizer": "adam"
+        "density": 142,
+        "dropout": 0.1,
+        "optimizer": "adam",
+        "activation": "softsign",
+        "shuffle": true,
     }
 }

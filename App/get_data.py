@@ -2,16 +2,11 @@ import requests
 from datetime import date
 from google.cloud import storage
 
+from generate_predictions import *
+
 BUCKET = 'sep_files'
 
-def get_data(request):
-    if request.args and 'symbol' in request.args:
-        symbol = request.args.get('symbol')
-    elif request_json and 'symbol' in request_json:
-        symbol = request_json['symbol']
-    else:
-        return 'You must specify a symbol from the stock marquet'
-        
+def get_data(symbol):
     today = date.today()
     last_date = today.strftime("%Y-%m-")+str(int(today.strftime("%d"))-1)
 

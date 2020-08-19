@@ -1,5 +1,6 @@
 import json
 from io import StringIO
+from google.cloud import storage
 import pandas as pd
 
 def get_daily_dataset(symbol, bucket_name, last_date):

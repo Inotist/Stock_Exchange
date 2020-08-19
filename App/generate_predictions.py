@@ -2,6 +2,7 @@ import json
 from sklearn import preprocessing
 from joblib import load
 from tensorflow.python.lib.io import file_io
+from google.cloud import storage
 import pandas as pd
 import numpy as np
 
@@ -9,13 +10,17 @@ import keras
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, LSTM
 
+from get_daily_dataset import *
+
 BACKLOOK = 92
 
 def generate_predictions(symbol, bucket_name, last_date):
     storage_client = storage.Client()
     bucket = storage_client.get_bucket(bucket_name)
 
-    blob = bucket.blob(f'models/architectures/{symbol}_models.json')
+    try: blob = bucket.blob(f'models/architectures/{symbol}_models.json')
+    except: return f"Doesn't have a trained model for {symbol}"
+
     models_params = blob.download_as_string()
 
     models_params = json.loads(models_params)
@@ -38,7 +43,7 @@ def generate_predictions(symbol, bucket_name, last_date):
         models[i].load_weights(temp_weights_location)
 
     data = read_dataset(symbol, bucket_name, last_date)
-    chunks = generate_chunks(data, symbol, bucket_name)
+    chunks = generate_chunks(data, models, symbol, bucket_name)
 
     predictions = np.array_str(chunks)
 
@@ -47,7 +52,7 @@ def generate_predictions(symbol, bucket_name, last_date):
 
     return predictions
 
-def generate_chunks(data, symbol, bucket_name):
+def generate_chunks(data, models, symbol, bucket_name):
     # Get normaliser
     storage_client = storage.Client()
     bucket = storage_client.get_bucket(bucket_name)
@@ -71,20 +76,20 @@ def generate_chunks(data, symbol, bucket_name):
         day5_sequence = np.array([data[day5index].copy()])
         
         if i == 6:
-            prediction = np.array([y_normaliser.inverse_transform(model1.predict(day1_sequence)),
-                                   y_normaliser.inverse_transform(model2.predict(day2_sequence)),
-                                   y_normaliser.inverse_transform(model3.predict(day3_sequence)),
-                                   y_normaliser.inverse_transform(model4.predict(day4_sequence)),
-                                   y_normaliser.inverse_transform(model5.predict(day5_sequence))]).reshape(1,5)
+            prediction = np.array([y_normaliser.inverse_transform(models[0].predict(day1_sequence)),
+                                   y_normaliser.inverse_transform(models[1].predict(day2_sequence)),
+                                   y_normaliser.inverse_transform(models[2].predict(day3_sequence)),
+                                   y_normaliser.inverse_transform(models[3].predict(day4_sequence)),
+                                   y_normaliser.inverse_transform(models[4].predict(day5_sequence))]).reshape(1,5)
             
             test_data = np.array([data[-i+1:,0]]).reshape(1,5)
             
         else:
-            prediction = np.append(np.array([y_normaliser.inverse_transform(model1.predict(day1_sequence)),
-                                             y_normaliser.inverse_transform(model2.predict(day2_sequence)),
-                                             y_normaliser.inverse_transform(model3.predict(day3_sequence)),
-                                             y_normaliser.inverse_transform(model4.predict(day4_sequence)),
-                                             y_normaliser.inverse_transform(model5.predict(day5_sequence))]).reshape(1,5),
+            prediction = np.append(np.array([y_normaliser.inverse_transform(models[0].predict(day1_sequence)),
+                                             y_normaliser.inverse_transform(models[1].predict(day2_sequence)),
+                                             y_normaliser.inverse_transform(models[2].predict(day3_sequence)),
+                                             y_normaliser.inverse_transform(models[3].predict(day4_sequence)),
+                                             y_normaliser.inverse_transform(models[4].predict(day5_sequence))]).reshape(1,5),
                                    prediction, axis=0)
 
     return prediction
@@ -93,10 +98,9 @@ def read_dataset(symbol, bucket_name, last_date):
     try:
         data = pd.read_csv(f'gs://{bucket_name}/datasets/{symbol}-{last_date}.csv').sort_values(by='timestamp')
     except:
-        data = get_daily_dataset(symbol, last_date)
+        data = get_daily_dataset(symbol, bucket_name, last_date)
 
     data = data.drop(columns='timestamp').to_numpy()
-
 
     # Normalise data
     storage_client = storage.Client()
