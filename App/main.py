@@ -1,20 +1,16 @@
-import webapp2
+from flask import Flask, render_template
 
-from get_data import *
+from get_data import get_data
 
+app = Flask(__name__)
 
-class MainPage(webapp2.RequestHandler):
-    def get(self):
-        self.response.headers['Content-Type'] = 'text/plain'
-        self.response.write('Welcome!')
+@app.route('/')
+@app.route('/<symbol>')
+def root(symbol=None):
+	if symbol:
+		return render_template('graph.html', data=get_data(symbol))
 
-    def post(self, symbol):
-    	data = get_data(symbol)
+	return render_template('index.html')
 
-        self.response.headers['Content-Type'] = 'text/plain'
-    	self.response.write(data)
-
-
-app = webapp2.WSGIApplication([
-    ('/', MainPage),
-], debug=True)
+if __name__ == '__main__':
+	app.run(host='127.0.0.1', port=8080, debug=True)
