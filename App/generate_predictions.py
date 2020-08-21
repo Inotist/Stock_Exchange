@@ -14,8 +14,8 @@ def generate_predictions(symbol, last_date):
     storage_client = storage.Client()
     bucket = storage_client.get_bucket(env["BUCKET"])
 
-    try: blob = bucket.blob(f'models/architectures/{symbol}_models.json')
-    except: return f"Doesn't have a trained model for {symbol}"
+    blob = bucket.blob(f'models/architectures/{symbol}_models.json')
+    if not blob.exists(): return f"Doesn't have a trained model for {symbol}"
 
     models_params = blob.download_as_string()
     
@@ -39,10 +39,13 @@ def generate_predictions(symbol, last_date):
     return predictions
 
 def read_dataset(symbol, last_date):
-    try:
-        data = read_csv(f'gs://{env["BUCKET"]}/datasets/{symbol}-{last_date}.csv').sort_values(by='timestamp')
-    except:
-        data = get_daily_dataset(symbol, last_date)
+    storage_client = storage.Client()
+    bucket = storage_client.get_bucket(env["BUCKET"])
+
+    blob = bucket.blob(f'datasets/{symbol}-{last_date}.csv')
+
+    if blob.exists(): data = read_csv(f'gs://{env["BUCKET"]}/datasets/{symbol}-{last_date}.csv').sort_values(by='timestamp')
+    else: data = get_daily_dataset(symbol, last_date).sort_values(by='timestamp')
 
     data = data.drop(columns='timestamp').to_numpy()
 

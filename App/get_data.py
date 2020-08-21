@@ -9,13 +9,11 @@ def get_data(symbol):
     today = date.today()
     last_date = today.strftime("%Y-%m-")+str(int(today.strftime("%d"))-1)
 
-    try:
-        storage_client = storage.Client()
-        bucket = storage_client.get_bucket(env["BUCKET"])
-        blob = bucket.blob(f'predictions/{symbol}-{last_date}.json')
-        predictions = blob.download_as_string()
-
-    except:
-        predictions = generate_predictions(symbol, last_date)
+    storage_client = storage.Client()
+    bucket = storage_client.get_bucket(env["BUCKET"])
+    blob = bucket.blob(f'predictions/{symbol}-{last_date}.json')
+    
+    if blob.exists(): predictions = blob.download_as_string()
+    else: predictions = generate_predictions(symbol, last_date)
 
     return predictions
