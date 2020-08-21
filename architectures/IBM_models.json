@@ -9,7 +9,7 @@
         "full_density": true,
         "activation": "elu",
         "shuffle": true,
-        "optimizer": "adam",
+        "optimizer": "adam"
     },
     "day2": {
         "symbol": "IBM",
@@ -19,7 +19,7 @@
         "activation": "relu",
         "twice": false,
         "lstmsize": 138,
-        "optimizer": "adam",
+        "optimizer": "adam"
     },
     "day3": {
         "symbol": "IBM",
@@ -30,7 +30,7 @@
         "full_density": true,
         "lstmsize": 158,
         "shuffle": true,
-        "optimizer": "adam",
+        "optimizer": "adam"
     },
     "day4": {
         "symbol": "IBM",
@@ -40,7 +40,7 @@
         "optimizer": "adam",
         "shuffle": true,
         "density": 98,
-        "twice": false,
+        "twice": false
     },
     "day5": {
         "symbol": "IBM",
@@ -52,6 +52,6 @@
         "dropout": 0.1,
         "optimizer": "adam",
         "activation": "softsign",
-        "shuffle": true,
+        "shuffle": true
     }
 }

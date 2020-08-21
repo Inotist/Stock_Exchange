@@ -1,5 +1,6 @@
 from os import environ as env
 
+import requests
 import json
 from io import StringIO
 from google.cloud import storage
