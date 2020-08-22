@@ -3,7 +3,6 @@ from os import environ as env
 import requests
 import json
 from io import BytesIO
-from sklearn import preprocessing
 from joblib import load
 from google.cloud import storage
 from pandas import read_csv
@@ -73,16 +72,18 @@ def generate_chunks(data, models, symbol):
 
     y_normaliser = load(temp_file)
 
+    backlook = int(env["BACKLOOK"])
+
     for i in arange(0,30,1):
         if i == 0:
-            day1_sequence = array([data[-(env["BACKLOOK"]+i):].copy()])
+            day1_sequence = array([data[-backlook:].copy()])
         else:
-            day1_sequence = array([data[-(env["BACKLOOK"]+i):-i].copy()])
+            day1_sequence = array([data[-(backlook+i):-i].copy()])
 
-        day2index = arange(len(data)+1-i-(env["BACKLOOK"]*2), len(data)-i, 2)
-        day3index = arange(len(data)+2-i-(env["BACKLOOK"]*3), len(data)-i, 3)
-        day4index = arange(len(data)+3-i-(env["BACKLOOK"]*4), len(data)-i, 4)
-        day5index = arange(len(data)+4-i-(env["BACKLOOK"]*5), len(data)-i, 5)
+        day2index = arange(len(data)+1-i-(backlook*2), len(data)-i, 2)
+        day3index = arange(len(data)+2-i-(backlook*3), len(data)-i, 3)
+        day4index = arange(len(data)+3-i-(backlook*4), len(data)-i, 4)
+        day5index = arange(len(data)+4-i-(backlook*5), len(data)-i, 5)
 
         day2_sequence = array([data[day2index].copy()])
         day3_sequence = array([data[day3index].copy()])
