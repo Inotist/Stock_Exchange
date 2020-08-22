@@ -8,7 +8,8 @@ app = Flask(__name__)
 @app.route('/<symbol>')
 def root(symbol=None):
 	if symbol:
-		return render_template('graph.html', data=get_data(symbol))
+		data, predictions = get_data(symbol)
+		return render_template('graph.html', data=data, predictions=predictions)
 
 	return render_template('index.html')
 

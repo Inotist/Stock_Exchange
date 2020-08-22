@@ -14,6 +14,6 @@ def get_data(symbol):
     blob = bucket.blob(f'predictions/{symbol}-{last_date}.json')
     
     if blob.exists(): predictions = blob.download_as_string()
-    else: predictions = generate_predictions(symbol, last_date)
+    else: data, predictions = generate_predictions(symbol, last_date)
 
-    return predictions
+    return data, predictions
