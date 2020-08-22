@@ -2,6 +2,7 @@ from os import environ as env
 
 import requests
 import json
+from io import BytesIO
 from sklearn import preprocessing
 from joblib import load
 from google.cloud import storage
@@ -54,9 +55,10 @@ def read_dataset(symbol, last_date):
     bucket = storage_client.get_bucket(env["BUCKET"])
 
     blob = bucket.blob(f'/models/preprocessing/{symbol}_x_normaliser.joblib')
-    blob.download_to_filename('x_normaliser.joblib')
+    temp_file = BytesIO()
+    blob.download_to_file(temp_file)
 
-    x_normaliser = load('x_normaliser.joblib')
+    x_normaliser = load(temp_file)
     
     return x_normaliser.transform(data)
 
@@ -66,9 +68,10 @@ def generate_chunks(data, models, symbol):
     bucket = storage_client.get_bucket(env["BUCKET"])
 
     blob = bucket.blob(f'/models/preprocessing/{symbol}_y_normaliser.joblib')
-    blob.download_to_filename('y_normaliser.joblib')
+    temp_file = BytesIO()
+    blob.download_to_file(temp_file)
 
-    y_normaliser = load('y_normaliser.joblib')
+    y_normaliser = load(temp_file)
 
     for i in arange(0,30,1):
         if i == 0:
