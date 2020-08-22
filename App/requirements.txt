@@ -5,3 +5,4 @@ joblib
 pandas
 numpy==1.16.0
 scipy==1.4.1
+fsspec
