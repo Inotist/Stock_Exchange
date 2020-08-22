@@ -11,7 +11,7 @@ from get_daily_dataset import get_daily_dataset
 def generate_predictions(symbol, last_date):
     data = read_dataset(symbol, last_date)
     predictions = requests.post(f"https://europe-west1-stock-exchange-predictions.cloudfunctions.net/build_model_and_predict?symbol={symbol}&last_date={last_date}").text
-    predictions = np.fromstring(re.sub('[\[\]\\n]', '', predictions).strip(), dtype=float, sep=' ').reshape(30,5)
+    predictions = fromstring(re.sub('[\[\]\\n]', '', predictions).strip(), dtype=float, sep=' ').reshape(30,5)
 
     storage_client = storage.Client()
     bucket = storage_client.get_bucket(env["BUCKET"])
