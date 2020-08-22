@@ -3,6 +3,7 @@ from os import environ as env
 import requests
 import json
 from io import BytesIO
+from sklearn import preprocessing
 from joblib import load
 from google.cloud import storage
 from pandas import read_csv
