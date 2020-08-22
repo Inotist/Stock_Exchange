@@ -54,7 +54,7 @@ def read_dataset(symbol, last_date):
     storage_client = storage.Client()
     bucket = storage_client.get_bucket(env["BUCKET"])
 
-    blob = bucket.blob(f'/models/preprocessing/{symbol}_x_normaliser.joblib')
+    blob = bucket.blob(f'models/preprocessing/{symbol}_x_normaliser.joblib')
     temp_file = BytesIO()
     blob.download_to_file(temp_file)
 
@@ -67,7 +67,7 @@ def generate_chunks(data, models, symbol):
     storage_client = storage.Client()
     bucket = storage_client.get_bucket(env["BUCKET"])
 
-    blob = bucket.blob(f'/models/preprocessing/{symbol}_y_normaliser.joblib')
+    blob = bucket.blob(f'models/preprocessing/{symbol}_y_normaliser.joblib')
     temp_file = BytesIO()
     blob.download_to_file(temp_file)
 
