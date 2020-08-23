@@ -8,5 +8,5 @@ handlers:
   script: auto
 
 env_variables:
-  BUCKET: 'sep_files'
+  BUCKET: "sep_files"
   BACKLOOK: 92
