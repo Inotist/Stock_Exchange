@@ -19,6 +19,6 @@ def get_daily_dataset(symbol, last_date):
     data = read_csv(StringIO(csv.text))
 
     blob = bucket.blob(f'datasets/{symbol}-{last_date}.csv')
-    blob.upload_from_string(csv.text, content_type='text/csv')
+    blob.upload_from_string(csv.text, content_type='text/plain')
     
     return data

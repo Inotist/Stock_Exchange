@@ -9,6 +9,6 @@ def generate_predictions(symbol, last_date):
     storage_client = storage.Client()
     bucket = storage_client.get_bucket(env["BUCKET"])
     blob = bucket.blob(f'predictions/{symbol}-{last_date}.json')
-    blob.upload_from_string(predictions, content_type='application/json')
+    blob.upload_from_string(predictions, content_type='text/plain')
 
     return predictions
