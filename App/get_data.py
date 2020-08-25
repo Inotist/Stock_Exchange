@@ -13,7 +13,7 @@ def get_data(symbol):
     today = date.today()
     last_date = today.strftime("%Y-%m-")+str(int(today.strftime("%d"))-1)
 
-    data = read_dataset(symbol, last_date)[-30:]
+    data = read_dataset(symbol, last_date)[-30:,0]
     predictions = read_predictions(symbol, last_date)
 
     return data, predictions
