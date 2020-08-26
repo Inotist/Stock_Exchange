@@ -1,93 +1,54 @@
-data = JSON.parse(formatArray(document.getElementById("data").innerHTML))
-predictions = JSON.parse(formatArray(document.getElementById("predictions").innerHTML))
+const x = d3.scale.ordinal().rangeRoundBands([0, width], .05);
+const y = d3.scale.linear().range([height, 0]);
 
-orderedData = orderData(data, predictions)
+const xAxis = d3.svg.axis()
+      .scale(x)
+      .orient("bottom")
+      .ticks(10);
 
-const chartSVG = createChartSVG();
-drawChart(chartSVG);
+const yAxis = d3.svg.axis()
+      .scale(y)
+      .orient("left")
+      .ticks(10);
 
-function createChartSVG() {
-	return d3.select("#chart").append("svg")
-    	.attr("width", chartWidth + margin.left + margin.right)
-    	.attr("height", chartHeight + margin.top + margin.bottom)
-  		.append("g")
-    	.attr("transform", `translate(${margin.left}, ${margin.top})`);
-}
+const svg = d3.select("body").append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-function drawChart(svg) {
-	svg.selectAll("*").remove();
-	const dataProp = pageData();
-
-	var x = d3.scaleLinear().range([0, chartWidth]);
-	var y = d3.scaleBand().rangeRound([0, chartHeight]).paddingInner(0.1);
-
-	var xAxis = d3.axisBottom(x)
-    	.ticks(ticks);
-	var yAxis = d3.axisLeft(y)
-    	.ticks(ticks);
+d3.json("", function(data) {
+  data = orderedData[0]
 	
-  	x.domain([1, ticks]);
-  	y.domain([d3.min(dataProp)-(d3.max(dataProp)-d3.min(dataProp))/2, d3.max(dataProp)]);
+  x.domain(data.map(function(d) { return d[0]; }));
 
-  	svg.append("g")
-    	.attr("transform", `translate(0, ${chartHeight})`)
-    	.call(xAxis);
+  datamin = d3.min(data.map(function(d) { return d[1]; }))
+  datamax = d3.max(data.map(function(d) { return d[1]; }))
+  y.domain([datamin-(datamax-datamin)/frac, datamax]);
 
-    svg.append("text")             
-      .attr("transform", `translate(${chartWidth / 2} ,${chartHeight + margin.top + 20})`)
-      .style("text-anchor", "middle")
-      .text("Properties");
+  console.log(datamin, datamax, data)
 
-  	svg.append("g")
-    	.call(yAxis);
+  svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis)
+      .selectAll("text")
+      .style("text-anchor", "end")
+      .attr("dx", "-.8em")
+      .attr("dy", "-.55em")
+      .attr("transform", "rotate(-90)" );
 
-    svg.append("text")
+  svg.append("g")
+      .attr("class", "y axis")
+      .call(yAxis)
+      .append("text")
       .attr("transform", "rotate(-90)")
-      .attr("y", 0 - margin.left)
-      .attr("x", 0 - (chartHeight / 2))
-      .attr("dy", "1em")
-      .style("text-anchor", "middle")
-      .text("Bedrooms");
+      .attr("y", 6)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+      .text("Price ($)");
 
-  	svg.selectAll("bar")
-    	.data(dataProp)
-    	.enter()
-    	.append("rect")
-    	.style("fill", barColor)
-    	.attr("y", d => y(d))
-    	.attr("height", y.bandwidth())
-    	.attr("width", d => x(d));
-}
+  drawBar(data.slice(0,5), "steelblue")
+  drawBar(data.slice(5,10), "red")
 
-function pageData() {
-
-}
-
-/////////// Para el final
-function setColor(layers) {
-	var prices = [];
-	layers.forEach (layer => {
-		prices.push(layer.feature.properties.avgprice);
-	});
-	const max = d3.max(prices);
-	const min = d3.min(prices);
-	const scale = ((max-min)/gradient.length)+outlier;
-
-	layers.forEach (layer => {
-		const price = layer.feature.properties.avgprice;
-
-		var count = 1;
-		gradient.forEach(color => {
-			if ((price <= min+scale*count && layer.options.color == defaultColor) || (count == gradient.length && price >= min+scale*count)) {
-				layer.options.color = color;
-				return;
-			};
-			count += 1;
-		});
-
-		if (layer.options.color == defaultColor) {
-			layer.options.opacity = defaultOpacity;
-			layer.options.fillOpacity = defaultOpacity;
-		};
-	});
-}
+});
