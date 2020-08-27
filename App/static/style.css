@@ -1,10 +1,5 @@
-.axis {
-  font: 10px sans-serif;
-}
-
-.axis path,
-.axis line {
+.line {
   fill: none;
-  stroke: #000;
-  shape-rendering: crispEdges;
+  stroke: steelblue;
+  stroke-width: 2px;
 }

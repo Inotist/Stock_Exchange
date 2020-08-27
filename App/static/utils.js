@@ -13,21 +13,35 @@ function orderData(data, predictions) {
 		dateInUse = syncDateDown(dateInUse[0], dateInUse[1])
 
 		dataSeq1 = data.slice(i-5, i)
+		newDataSeq1 = new Array()
 		dateInUse2 = dateInUse.slice()
-		for (f = 4; f >= 0; f--) {
-			dataSeq1[f] = [appendDate(dateInUse2[1]), dataSeq1[f]]
+		for (f = 4; f >= 0;) {
+			if (dateInUse2[0] == 6 || dateInUse2[0] == 0) {
+				newDataSeq1.unshift([appendDate(dateInUse2[1]), dataSeq1[f]])
+			}
+			else {
+				newDataSeq1.unshift([appendDate(dateInUse2[1]), dataSeq1[f]])
+				f--
+			}
 			dateInUse2 = syncDateDown(dateInUse2[0], dateInUse2[1])
 		}
 
 		dataSeq2 = predictions[i-1]
+		newDataSeq2 = new Array()
 		dateInUse2 = dateInUse.slice()
-		dataSeq2 = dataSeq2.map(function(d) {
+		for (f = 0; f <=4;) {
 			dateInUse2 = syncDateUp(dateInUse2[0], dateInUse2[1])
-			return [appendDate(dateInUse2[1]), d]
-		})
 
-		dataSeq = dataSeq1.concat(dataSeq2)
+			if (dateInUse2[0] == 6 || dateInUse2[0] == 0) {
+				newDataSeq2.push([appendDate(dateInUse2[1]), dataSeq2[f-1]])
+			}
+			else {
+				newDataSeq2.push([appendDate(dateInUse2[1]), dataSeq2[f]])
+				f++
+			}
+		}
 
+		dataSeq = newDataSeq1.concat(newDataSeq2)
 		dataProp.push(dataSeq)
 	}
 	return dataProp
@@ -35,33 +49,23 @@ function orderData(data, predictions) {
 
 function syncDateDown(weekday, date) {
 	weekday -= 1
+	if (weekday == -1) {
+		weekday = 6
+	}
 	newDate = new Date(date)
 	newDate.setDate(newDate.getDate()-1)
 
-	if (weekday == 0) {
-		weekday = 5
-		newDate.setDate(newDate.getDate()-2)
-	}
-	else if (weekday == 6) {
-		weekday = 5
-		newDate.setDate(newDate.getDate()-1)
-	}
 	return [weekday, newDate]
 }
 
 function syncDateUp(weekday, date) {
 	weekday += 1
+	if (weekday == 7) {
+		weekday = 0
+	}
 	newDate = new Date(date)
 	newDate.setDate(newDate.getDate()+1)
 
-	if (weekday == 0) {
-		weekday = 1
-		newDate.setDate(newDate.getDate()+1)
-	}
-	else if (weekday == 6) {
-		weekday = 1
-		newDate.setDate(newDate.getDate()+2)
-	}
 	return [weekday, newDate]
 }
 
@@ -73,13 +77,4 @@ function appendDate(date) {
 	return `${da}-${mo}-${ye}`
 }
 
-function drawBar(data, color) {
-	svg.selectAll("bar")
-		.data(data)
-    	.enter().append("rect")
-    	.style("fill", color)
-    	.attr("x", function(d) { return x(d[0]); })
-    	.attr("width", x.rangeBand())
-    	.attr("y", function(d) { return y(d[1]); })
-    	.attr("height", function(d) { return height - y(d[1]); });
-}
+const parseTime = d3.timeParse("%d-%b-%Y")
