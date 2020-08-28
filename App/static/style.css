@@ -1,5 +1,11 @@
-.line {
+.lineblue {
   fill: none;
   stroke: steelblue;
+  stroke-width: 2px;
+}
+
+.linered {
+  fill: none;
+  stroke: red;
   stroke-width: 2px;
 }

@@ -6,30 +6,45 @@ function orderData(data, predictions) {
 	weekday = new Date().getDay()
 	date = new Date()
 	dateInUse = [weekday, date]
+	dateInUse = syncDateDown(dateInUse[0], dateInUse[1])
 
 	const dataProp = new Array();
 
-	for (i = data.length; i >= 5; i--) {
-		dateInUse = syncDateDown(dateInUse[0], dateInUse[1])
+	for (i = data.length; i >= 6; i--) {
 
-		dataSeq1 = data.slice(i-5, i)
-		newDataSeq1 = new Array()
-		dateInUse2 = dateInUse.slice()
-		for (f = 4; f >= 0;) {
-			if (dateInUse2[0] == 6 || dateInUse2[0] == 0) {
-				newDataSeq1.unshift([appendDate(dateInUse2[1]), dataSeq1[f]])
+		if (dataProp.length <= 5) {
+			dataSeq1 = data.slice(i-5, i+dataProp.length)
+			newDataSeq1 = new Array()
+			dateInUse2 = dateInUse.slice()
+			for (f = 4+dataProp.length; f >= 0;) {
+				if (!(dateInUse2[0] == 6 || dateInUse2[0] == 0)) {
+					newDataSeq1.unshift([appendDate(dateInUse2[1]), dataSeq1[f]])
+					f--
+				}
+				dateInUse2 = syncDateDown(dateInUse2[0], dateInUse2[1])
 			}
-			else {
-				newDataSeq1.unshift([appendDate(dateInUse2[1]), dataSeq1[f]])
-				f--
+		}
+		else {
+			dateInUse = syncDateDown(dateInUse[0], dateInUse[1])
+			if (dateInUse[0] == 0) {
+				dateInUse = syncDateDown(dateInUse[0], dateInUse[1])
+				dateInUse = syncDateDown(dateInUse[0], dateInUse[1])
 			}
-			dateInUse2 = syncDateDown(dateInUse2[0], dateInUse2[1])
+			dataSeq1 = data.slice(i-5, i+5)
+			newDataSeq1 = new Array()
+			dateInUse2 = dateInUse.slice()
+			for (f = 9; f >= 0;) {
+				if (!(dateInUse2[0] == 6 || dateInUse2[0] == 0)) {
+					newDataSeq1.unshift([appendDate(dateInUse2[1]), dataSeq1[f]])
+					f--
+				}
+				dateInUse2 = syncDateDown(dateInUse2[0], dateInUse2[1])
+			}
 		}
 
-		dataSeq2 = predictions[i-1]
+		dataSeq2 = predictions[i-6].concat(predictions[i-1])
 		newDataSeq2 = new Array()
-		dateInUse2 = dateInUse.slice()
-		for (f = 0; f <=4;) {
+		for (f = 0; f <=9;) {
 			dateInUse2 = syncDateUp(dateInUse2[0], dateInUse2[1])
 
 			if (dateInUse2[0] == 6 || dateInUse2[0] == 0) {
@@ -41,8 +56,7 @@ function orderData(data, predictions) {
 			}
 		}
 
-		dataSeq = newDataSeq1.concat(newDataSeq2)
-		dataProp.push(dataSeq)
+		dataProp.push([newDataSeq1, newDataSeq2])
 	}
 	return dataProp
 }
