@@ -1,11 +1,15 @@
+.title {
+	margin-left: 200px;
+}
+
 .lineblue {
   fill: none;
   stroke: steelblue;
-  stroke-width: 2px;
+  stroke-width: 4px;
 }
 
 .linered {
   fill: none;
   stroke: red;
-  stroke-width: 2px;
+  stroke-width: 4px;
 }

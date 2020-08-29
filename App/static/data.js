@@ -18,3 +18,6 @@ var height = window.innerHeight - margin.top*2 - margin.bottom*2
 const frac = 5 // Fracción en la que se muestra el valor mínimo con respecto al resto de valores visibles en el momento
 
 var n = 0 // Inicializo el índice de los datos que se muestran en pantalla
+
+var legend_keys = ["Real Closing Prices", "Predicted Closing Prices"]
+var legend_colors = ["steelblue", "red"]

@@ -56,4 +56,18 @@ function drawChart(n) {
 
   svg.append("g")
       .call(d3.axisLeft(yScale));
+
+  var lineLegend = svg.selectAll(".lineLegend").data(legend_keys)
+      .enter().append("g")
+      .attr("class","lineLegend")
+      .attr("transform", function (d,i) {
+              return "translate(" + width + "," + (i*20)+")";
+          });
+
+  lineLegend.append("text").text(function (d) {return d;})
+      .attr("transform", "translate(15,9)");
+
+  lineLegend.append("rect")
+      .attr("fill", function (d, i) { return legend_colors[i]; })
+      .attr("width", 10).attr("height", 10);
 }

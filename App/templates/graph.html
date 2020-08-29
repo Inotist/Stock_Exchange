@@ -6,16 +6,19 @@
 </head>
 <body>
 
-	<h1>Stock Exchange Predictions {{ symbol }}</h1>
+  <h1 class="title">Stock Exchange Predictions for {{ symbol }}</h1>
+  <h3>Indices</h3>
+  <form action="IBM">
+  <button type="submit">IBM</button>
 
-    <div id="data" hidden>{{ data }}</div>
-    <div id="predictions" hidden>{{ predictions }}</div>
+  <div id="data" hidden>{{ data }}</div>
+  <div id="predictions" hidden>{{ predictions }}</div>
   
-    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <script src="https://d3js.org/d3.v5.min.js"></script>
-    <script src="{{ url_for('static', filename='utils.js') }}"></script>
-    <script src="{{ url_for('static', filename='data.js') }}"></script>
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
+  <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+  <script src="{{ url_for('static', filename='utils.js') }}"></script>
+  <script src="{{ url_for('static', filename='data.js') }}"></script>
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
   
 </body>
 </html>
