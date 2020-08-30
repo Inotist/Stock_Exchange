@@ -3,6 +3,7 @@ from os import environ as env
 from datetime import date
 from google.cloud import storage
 from pandas import read_csv
+from io import BytesIO
 from numpy import fromstring
 import re
 
@@ -23,15 +24,18 @@ def read_dataset(symbol, last_date):
     bucket = storage_client.get_bucket(env["BUCKET"])
     blob = bucket.blob(f'datasets/{symbol}-{last_date}.csv')
 
-    if blob.exists():
-        data = read_csv(f'gs://{env["BUCKET"]}/datasets/{symbol}-{last_date}.csv')
-    else:
+    temp_file = BytesIO()
+    blob.download_to_file(temp_file)
+    
+    try:
+        data = read_csv(temp_file)
+        data = data.sort_values(by='timestamp').drop(columns='timestamp').to_numpy()
+    except:
         blobs = bucket.list_blobs(prefix='datasets/')
         for blob in blobs:
             blob.delete()
         data = get_daily_dataset(symbol, last_date)
-
-    data = data.sort_values(by='timestamp').drop(columns='timestamp').to_numpy()
+        data = data.sort_values(by='timestamp').drop(columns='timestamp').to_numpy()
     
     return data
 
