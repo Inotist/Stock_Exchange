@@ -16,6 +16,9 @@ def upload_file_to_bucket(bucket_name, blob_file, destination_file_name):
     blob.upload_from_filename(blob_file.name, content_type='text/csv')
     
 class NasdaqSpider(scrapy.Spider):
+    def __init__(self, symbol="ibm"):
+        self.symbol = symbol
+
     name = 'nasdaqspider'
     cycles = 0
     ID = 1
@@ -28,7 +31,7 @@ class NasdaqSpider(scrapy.Spider):
     body = ".body__content p::text"
     date = ".timestamp__date time::attr(datetime)"
     
-    start_urls = [f'https://www.nasdaq.com/market-activity/stocks/{symbol}/news-headlines']
+    start_urls = [f'https://www.nasdaq.com/market-activity/stocks/{self.symbol}/news-headlines']
     
     def parse(self, response):
         for new in response.css(self.news):
@@ -64,7 +67,7 @@ def activate(request):
     process = CrawlerProcess({
         'USER_AGENT': 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)'
     })
-    process.crawl(NasdaqSpider)
+    process.crawl(NasdaqSpider, symbol)
     process.start()
     TEMPORARY_FILE.seek(0)
     upload_file_to_bucket(BUCKET_NAME, TEMPORARY_FILE, DESTINATION_FILE_NAME)
