@@ -31,7 +31,7 @@ class NasdaqSpider(scrapy.Spider):
     body = ".body__content p::text"
     date = ".timestamp__date time::attr(datetime)"
     
-    start_urls = [f'https://www.nasdaq.com/market-activity/stocks/{self.symbol}/news-headlines']
+    start_urls = [f'https://www.nasdaq.com/market-activity/stocks/{symbol}/news-headlines']
     
     def parse(self, response):
         for new in response.css(self.news):
