@@ -24,10 +24,9 @@ def read_dataset(symbol, last_date):
     bucket = storage_client.get_bucket(env["BUCKET"])
     blob = bucket.blob(f'datasets/{symbol}-{last_date}.csv')
 
-    temp_file = BytesIO()
-    blob.download_to_file(temp_file)
-    
     try:
+        temp_file = BytesIO()
+        blob.download_to_file(temp_file)
         data = read_csv(temp_file)
         data = data.sort_values(by='timestamp').drop(columns='timestamp').to_numpy()
     except:
