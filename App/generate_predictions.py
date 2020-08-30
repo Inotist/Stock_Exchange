@@ -20,3 +20,5 @@ def generate_smooth_predictions(symbol, last_date):
     bucket = storage_client.get_bucket(env["BUCKET"])
     blob = bucket.blob(f'predictions/{symbol}-{last_date}_smooth.json')
     blob.upload_from_string(predictions, content_type='text/plain')
+
+    return smooth_predictions

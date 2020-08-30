@@ -7,7 +7,7 @@ from numpy import fromstring
 import re
 
 from get_daily_dataset import get_daily_dataset
-from generate_predictions import generate_predictions
+from generate_predictions import generate_predictions, generate_smooth_predictions
 
 def get_data(symbol):
     today = date.today()
