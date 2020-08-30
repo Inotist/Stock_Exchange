@@ -1,57 +1,69 @@
 {
     "day1": {
         "symbol": "IBM",
-        "day": "day1",
-        "lstmsize": 178,
-        "density": 164,
+        "tag": "day1",
+        "lstmsize": 162,
         "twice": true,
-        "dropout": 0.1,
-        "full_density": true,
-        "activation": "elu",
         "shuffle": true,
-        "optimizer": "adam"
+        "optimizer": "adam",
+        "activation": "elu",
+        "density": 188,
+        "full_density": true
     },
     "day2": {
         "symbol": "IBM",
-        "day": "day2",
-        "density": 222,
+        "tag": "day2",
+        "density": 238,
+        "twice": true,
+        "optimizer": "adam",
+        "dropout": 0.1,
+        "activation": "elu",
+        "full_density": true,
         "shuffle": true,
-        "activation": "relu",
-        "twice": false,
-        "lstmsize": 138,
-        "optimizer": "adam"
+        "lstmsize": 176
     },
     "day3": {
         "symbol": "IBM",
-        "day": "day3",
-        "density": 186,
-        "activation": "softsign",
-        "twice": true,
-        "full_density": true,
-        "lstmsize": 158,
+        "tag": "day3",
         "shuffle": true,
-        "optimizer": "adam"
+        "dropout": 0.1,
+        "lstmsize": 160,
+        "activation": "relu",
+        "twice": false,
+        "optimizer": "adam",
+        "density": 122
     },
     "day4": {
         "symbol": "IBM",
-        "day": "day4",
-        "lstmsize": 118,
+        "tag": "day4",
+        "density": 138,
+        "shuffle": true,
+        "full_density": true,
+        "twice": false,
         "activation": "relu",
         "optimizer": "adam",
-        "shuffle": true,
-        "density": 98,
-        "twice": false
+        "lstmsize": 92
     },
     "day5": {
         "symbol": "IBM",
-        "day": "day5",
-        "lstmsize": 178,
-        "twice": true,
-        "full_density": true,
-        "density": 142,
-        "dropout": 0.1,
-        "optimizer": "adam",
+        "tag": "day5",
         "activation": "softsign",
-        "shuffle": true
+        "shuffle": true,
+        "lstmsize": 104,
+        "full_density": true,
+        "twice": false,
+        "optimizer": "adam",
+        "density": 180
+    },
+    "full": {
+        "symbol": "IBM",
+        "tag": "full",
+        "lstmsize": 94,
+        "optimizer": "adamax",
+        "shuffle": true,
+        "density": 140,
+        "twice": false,
+        "activation": "relu",
+        "full_prediction": true
     }
 }

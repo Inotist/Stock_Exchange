@@ -2,7 +2,7 @@ function formatArray(text) {
 	return text.replace(/\. /g,' ').replace(/\s+/g,' ').replace(/ ]/g, "]").replace(/ /g, ", ");
 }
 
-function orderData(data, predictions) {
+function orderData(data, predictions, smooth_predictions) {
 	weekday = new Date().getDay()
 	date = new Date()
 	dateInUse = [weekday, date]
@@ -44,6 +44,7 @@ function orderData(data, predictions) {
 
 		dataSeq2 = predictions[i-6].concat(predictions[i-1])
 		newDataSeq2 = new Array()
+		newDataSeq3 = new Array()
 		for (f = 0; f <=9;) {
 			dateInUse2 = syncDateUp(dateInUse2[0], dateInUse2[1])
 
@@ -51,12 +52,16 @@ function orderData(data, predictions) {
 				newDataSeq2.push([appendDate(dateInUse2[1]), dataSeq2[f-1]])
 			}
 			else {
+				if (i == data.length && f > 4) {
+					newDataSeq3.push([appendDate(dateInUse2[1]), smooth_predictions[f-5]])
+				}
 				newDataSeq2.push([appendDate(dateInUse2[1]), dataSeq2[f]])
 				f++
 			}
 		}
 
-		dataProp.push([newDataSeq1, newDataSeq2])
+		if (i == data.length) { dataProp.push([newDataSeq1, newDataSeq2, newDataSeq3]) }
+		else { dataProp.push([newDataSeq1, newDataSeq2]) }
 	}
 	return dataProp
 }

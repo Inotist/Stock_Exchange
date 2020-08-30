@@ -13,3 +13,9 @@
   stroke: red;
   stroke-width: 4px;
 }
+
+.lineyellow {
+  fill: none;
+  stroke: yellow;
+  stroke-width: 4px;
+}

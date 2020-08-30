@@ -14,9 +14,9 @@ def get_data(symbol):
     last_date = today.strftime("%Y-%m-")+str(int(today.strftime("%d"))-1)
 
     data = read_dataset(symbol, last_date)[-30:,0]
-    predictions = read_predictions(symbol, last_date)
+    predictions, smooth_predictions = read_predictions(symbol, last_date)
 
-    return data, predictions
+    return data, predictions, smooth_predictions
 
 def read_dataset(symbol, last_date):
     storage_client = storage.Client()
@@ -26,6 +26,9 @@ def read_dataset(symbol, last_date):
     if blob.exists():
         data = read_csv(f'gs://{env["BUCKET"]}/datasets/{symbol}-{last_date}.csv')
     else:
+        blobs = bucket.list_blobs(prefix='datasets/')
+        for blob in blobs:
+            blob.delete()
         data = get_daily_dataset(symbol, last_date)
 
     data = data.sort_values(by='timestamp').drop(columns='timestamp').to_numpy()
@@ -41,8 +44,20 @@ def read_predictions(symbol, last_date):
         predictions = blob.download_as_string()
         predictions = predictions.decode()
     else:
+        blobs = bucket.list_blobs(prefix='predictions/')
+        for blob in blobs:
+            blob.delete()
         predictions = generate_predictions(symbol, last_date)
 
-    predictions = fromstring(re.sub('[\[\]\\n]', '', predictions).strip(), dtype=float, sep=' ').reshape(30,5)
+    blob = bucket.blob(f'predictions/{symbol}-{last_date}_smooth.json')
 
-    return predictions
+    if blob.exists():
+        smooth_predictions = blob.download_as_string()
+        smooth_predictions = smooth_predictions.decode()
+    else:
+        smooth_predictions = generate_smooth_predictions(symbol, last_date)
+
+    predictions = fromstring(re.sub('[\[\]\\n]', '', predictions).strip(), dtype=float, sep=' ').reshape(30,5)
+    smooth_predictions = fromstring(re.sub('[\[\]\\n]', '', smooth_predictions).strip(), dtype=float, sep=' ')
+
+    return predictions, smooth_predictions

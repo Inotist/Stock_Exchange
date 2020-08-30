@@ -33,6 +33,11 @@ function drawChart(n) {
   predData = orderedData[n][1]
 
   dataLen = workData.concat(predData)
+
+  if (n == 0) {
+    smoothPred = orderedData[n][2]
+    dataLen = dataLen.concat(smoothPred)
+  }
     
   xScale.domain(d3.extent(dataLen, function(d) { return d[0]; }));
 
@@ -49,6 +54,13 @@ function drawChart(n) {
       .data([predData])
       .attr("class", "linered")
       .attr("d", line);
+
+  if (n == 0) {
+    svg.append("path")
+        .data([smoothPred])
+        .attr("class", "lineyellow")
+        .attr("d", line);
+  }
 
   svg.append("g")
       .attr("transform", "translate(0," + height + ")")

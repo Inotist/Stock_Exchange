@@ -140,7 +140,7 @@ def build_model(**params):
 
     storage_client = storage.Client()
     bucket = storage_client.get_bucket(env["BUCKET"])
-    blob = bucket.blob(f"models/weights/{params['symbol']}_models/{params['day']}.hdf5")
+    blob = bucket.blob(f"models/weights/{params['symbol']}_models/{params['tag']}.hdf5")
     temp_file = BytesIO()
 
     # I had to do this to trick the check that load_weights does to the end of the file name.
