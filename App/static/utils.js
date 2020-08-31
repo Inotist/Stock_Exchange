@@ -11,6 +11,13 @@ function orderData(data, predictions, smooth_predictions) {
 	const dataProp = new Array();
 
 	for (i = data.length; i >= 6; i--) {
+		if (dateInUse[0] == 0) {
+			dateInUse = syncDateDown(dateInUse[0], dateInUse[1])
+			dateInUse = syncDateDown(dateInUse[0], dateInUse[1])
+		}
+		if (dateInUse[0] == 6) {
+			dateInUse = syncDateDown(dateInUse[0], dateInUse[1])
+		}
 
 		if (dataProp.length <= 5) {
 			dataSeq1 = data.slice(i-5, i+dataProp.length)
@@ -26,13 +33,6 @@ function orderData(data, predictions, smooth_predictions) {
 		}
 		else {
 			dateInUse = syncDateDown(dateInUse[0], dateInUse[1])
-			if (dateInUse[0] == 0) {
-				dateInUse = syncDateDown(dateInUse[0], dateInUse[1])
-				dateInUse = syncDateDown(dateInUse[0], dateInUse[1])
-			}
-			if (dateInUse[0] == 6) {
-				dateInUse = syncDateDown(dateInUse[0], dateInUse[1])
-			}
 			dataSeq1 = data.slice(i-5, i+5)
 			newDataSeq1 = new Array()
 			dateInUse2 = dateInUse.slice()
