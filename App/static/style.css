@@ -3,19 +3,30 @@
 }
 
 .lineblue {
-  fill: none;
+  fill: steelblue;
+  fill-opacity: 0.2;
   stroke: steelblue;
   stroke-width: 4px;
 }
 
 .linered {
-  fill: none;
+  fill: red;
+  fill-opacity: 0.2;
   stroke: red;
   stroke-width: 4px;
 }
 
 .lineyellow {
-  fill: none;
+  fill: yellow;
+  fill-opacity: 0.5;
   stroke: yellow;
   stroke-width: 4px;
+}
+
+.whitetext {
+  color: white;
+}
+
+.lineLegend {
+   fill: white
 }

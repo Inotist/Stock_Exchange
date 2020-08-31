@@ -2,14 +2,19 @@
 <meta charset="utf-8">
 <html>
 <head>
-  <title>Stock Exchange Predictions</title>
+  <div class="text">
+    <title>Stock Exchange Predictions</title>
+  </div>
 </head>
 <body>
 
-  <h1 class="title">Stock Exchange Predictions for {{ symbol }}</h1>
-  <h3>Indices</h3>
-  <form action="IBM">
-  <button type="submit">IBM</button>
+  <div class="text">
+    <h1 class="title">Stock Exchange Predictions for {{ symbol }}</h1>
+    <h3>Indices</h3>
+    <form action="IBM">
+      <button type="submit">IBM</button>
+    </form>
+  </div>
 
   <div id="data" hidden>{{ data }}</div>
   <div id="predictions" hidden>{{ predictions }}</div>
@@ -20,6 +25,11 @@
   <script src="{{ url_for('static', filename='utils.js') }}"></script>
   <script src="{{ url_for('static', filename='data.js') }}"></script>
   <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+  <div>
+    <button type="button" onclick="light()">Light</button>
+    <button type="button" onclick="dark()">Dark</button>
+  </div>
   
 </body>
 </html>

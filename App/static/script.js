@@ -1,3 +1,6 @@
+var theme = "dark";
+document.body.style.background = "#02021A";
+
 const xScale = d3.scaleTime().range([0, width]);
 
 const yScale = d3.scaleLinear().range([height, 0]);
@@ -13,17 +16,17 @@ const svg = d3.select("body").append("svg")
   .append("g")
   .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-drawChart(n);
+drawChart(n, theme);
 
 document.getElementById("mainsvg").addEventListener("wheel", function (event) {
-  if (event.deltaY < 0) { n -= 1; }
-  else if (event.deltaY > 0) { n += 1; }
+  if (event.deltaY > 0) { n -= 1; }
+  else if (event.deltaY < 0) { n += 1; }
   if (n < 0) { n = 0; }
   else if (n >= orderedData.length) { n = orderedData.length-1; }
-  drawChart(n);
+  drawChart(n, theme);
 });
 
-function drawChart(n) {
+function drawChart(n, theme) {
   svg.selectAll("path").remove();
   svg.selectAll("g").remove();
   svg.append("g")
@@ -41,17 +44,21 @@ function drawChart(n) {
     
   xScale.domain(d3.extent(dataLen, function(d) { return d[0]; }));
 
-  datamin = d3.min(dataLen.map(function(d) { return d[1]; }))
   datamax = d3.max(dataLen.map(function(d) { return d[1]; }))
-  yScale.domain([datamin-(datamax-datamin)/frac, datamax]);
+  datamin = d3.min(dataLen.map(function(d) { return d[1]; }))
+  datamin = datamin-(datamax-datamin)/frac
+  yScale.domain([datamin, datamax]);
+
+  workDataFill = fillPath(workData.slice(), datamin)
+  predDataFill = fillPath(predData.slice(), datamin)
 
   svg.append("path")
-      .data([workData])
+      .data([workDataFill])
       .attr("class", "lineblue")
       .attr("d", line);
 
   svg.append("path")
-      .data([predData])
+      .data([predDataFill])
       .attr("class", "linered")
       .attr("d", line);
 
@@ -62,12 +69,20 @@ function drawChart(n) {
         .attr("d", line);
   }
 
-  svg.append("g")
-      .attr("transform", "translate(0," + height + ")")
-      .call(d3.axisBottom(xScale));
+  if (theme == "dark") {
+    elements = document.getElementsByClassName("text");
+    for (i = 0; i < elements.length; i++) {
+      elements[i].classList.add("whitetext")
+    };
 
-  svg.append("g")
-      .call(d3.axisLeft(yScale));
+    svg.append("g")
+        .attr("class", "whitetext")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(xScale));
+
+    svg.append("g")
+        .attr("class", "whitetext")
+        .call(d3.axisLeft(yScale));
 
   var lineLegend = svg.selectAll(".lineLegend").data(legend_keys)
       .enter().append("g")
@@ -75,6 +90,26 @@ function drawChart(n) {
       .attr("transform", function (d,i) {
               return "translate(" + width + "," + (i*20)+")";
           });
+  }
+  else {
+    elements = document.getElementsByClassName("text");
+    for (i = 0; i < elements.length; i++) {
+      elements[i].classList.remove("whitetext")
+    };
+
+    svg.append("g")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(xScale));
+
+    svg.append("g")
+        .call(d3.axisLeft(yScale));
+
+  var lineLegend = svg.selectAll(".lineLegend").data(legend_keys)
+      .enter().append("g")
+      .attr("transform", function (d,i) {
+              return "translate(" + width + "," + (i*20)+")";
+          });
+  }
 
   lineLegend.append("text").text(function (d) {return d;})
       .attr("transform", "translate(15,9)");
@@ -82,4 +117,24 @@ function drawChart(n) {
   lineLegend.append("rect")
       .attr("fill", function (d, i) { return legend_colors[i]; })
       .attr("width", 10).attr("height", 10);
+}
+
+function fillPath(path, min) {
+  path.push([path[path.length-1][0], min]);
+  path.push([path[0][0], min]);
+  path.push(path[0]);
+
+  return path;
+}
+
+function light() {
+  document.body.style.background = "white";
+  theme = "light"
+  drawChart(n, "light");
+}
+
+function dark() {
+  document.body.style.background = "#02021A";
+  theme = "dark"
+  drawChart(n, "dark");
 }

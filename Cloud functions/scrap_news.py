@@ -58,7 +58,6 @@ def activate(request):
         return f"Symbol hasn't been specified"
 
     now = datetime.now()
-    request_json = request.get_json()
     BUCKET_NAME = 'sep_files'
     DESTINATION_FILE_NAME = f"datasets/news/{symbol}-{now.strftime('%Y/%m/%d/')}.csv"
     TEMPORARY_FILE.writelines("id|title|text|date\n")
