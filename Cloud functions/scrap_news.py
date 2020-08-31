@@ -33,20 +33,20 @@ class NasdaqSpider(scrapy.Spider):
     
     def parse(self, response):
         for new in response.css(self.news):
-            response.follow(new, self.get_new)
+            yield response.follow(new, self.scrap)
                 
         self.cycles += 1
             
         if self.cycles <= 10:
-            response.follow(response.css(follow), self.parse)
+            yield response.follow(response.css(follow)[0], self.parse)
 
-    def get_new(self, response):
-            title_text = response.css(self.title).extract_first()
-            body_text = response.css(self.body).extract()
-            date_text = response.css(self.date).extract_first()
+    def scrap(self, response):
+        title_text = response.css(self.title).extract_first()
+        body_text = response.css(self.body).extract()
+        date_text = response.css(self.date).extract_first()
             
-            TEMPORARY_FILE.writelines(f"{self.ID}|{title_text}|{body_text}|{date_text}\n")
-            self.ID += 1
+        TEMPORARY_FILE.writelines(f"{self.ID}|{title_text}|{body_text}|{date_text}\n")
+        self.ID += 1
             
 def activate(request):
     request_json = request.get_json()
@@ -67,7 +67,6 @@ def activate(request):
     })
     process.crawl(NasdaqSpider, symbol)
     process.start()
-    TEMPORARY_FILE.seek(0)
     upload_file_to_bucket(BUCKET_NAME, TEMPORARY_FILE, DESTINATION_FILE_NAME)
     TEMPORARY_FILE.close()
     

@@ -28,6 +28,8 @@ function orderData(data, predictions, smooth_predictions) {
 			dateInUse = syncDateDown(dateInUse[0], dateInUse[1])
 			if (dateInUse[0] == 0) {
 				dateInUse = syncDateDown(dateInUse[0], dateInUse[1])
+			}
+			if (dateInUse[0] == 6) {
 				dateInUse = syncDateDown(dateInUse[0], dateInUse[1])
 			}
 			dataSeq1 = data.slice(i-5, i+5)

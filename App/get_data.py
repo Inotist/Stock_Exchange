@@ -30,7 +30,7 @@ def read_dataset(symbol, last_date):
         data = read_csv(temp_file)
         data = data.sort_values(by='timestamp').drop(columns='timestamp').to_numpy()
     except:
-        blobs = bucket.list_blobs(prefix='datasets/')
+        blobs = bucket.list_blobs(prefix=f'datasets/{symbol}')
         for blob in blobs:
             blob.delete()
         data = get_daily_dataset(symbol, last_date)
@@ -47,7 +47,7 @@ def read_predictions(symbol, last_date):
         predictions = blob.download_as_string()
         predictions = predictions.decode()
     else:
-        blobs = bucket.list_blobs(prefix='predictions/')
+        blobs = bucket.list_blobs(prefix=f'predictions/{symbol}')
         for blob in blobs:
             blob.delete()
         predictions = generate_predictions(symbol, last_date)
