@@ -37,7 +37,7 @@ class NasdaqSpider(scrapy.Spider):
                 
         self.cycles += 1
             
-        if self.cycles <= 10:
+        if self.cycles <= 931:
             yield response.follow(response.css(follow)[0], self.parse)
 
     def scrap(self, response):
