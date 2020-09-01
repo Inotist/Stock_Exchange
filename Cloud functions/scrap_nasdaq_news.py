@@ -1,3 +1,5 @@
+# Página finalmente descartada porque el botón de "siguiente" no lleva a un enlace y no he podido conseguir que el scraper avance.
+
 from google.cloud import storage
 from scrapy.crawler import CrawlerProcess
 from datetime import datetime
