@@ -1,6 +1,6 @@
 from os import environ as env
 
-from datetime import date
+from datetime import date, timedelta
 from google.cloud import storage
 from pandas import read_csv
 from io import BytesIO
@@ -12,7 +12,8 @@ from generate_predictions import generate_predictions, generate_smooth_predictio
 
 def get_data(symbol):
     today = date.today()
-    last_date = today.strftime("%Y-%m-")+str(int(today.strftime("%d"))-1)
+    last_date = today - timedelta(days=1)
+    last_date = last_date.strftime("%Y-%m-%d")
 
     data = read_dataset(symbol, last_date)[-30:,0]
     predictions, smooth_predictions = read_predictions(symbol, last_date)

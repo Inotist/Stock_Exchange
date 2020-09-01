@@ -21,7 +21,7 @@ class NasdaqSpider(scrapy.Spider):
 
     title = ".article-header__headline span::text"
     body = ".body__content p::text"
-    date = ".timestamp__date time::attr(datetime)"
+    date = ".timestamp__date::text"
     
     def parse(self, response):
         for new in response.css(self.news):
@@ -29,7 +29,7 @@ class NasdaqSpider(scrapy.Spider):
                 
         self.cycles += 1
             
-        if self.cycles <= 931:
+        if self.cycles <= 10:
             yield response.follow(response.css(follow)[0], self.parse)
 
     def scrap(self, response):
