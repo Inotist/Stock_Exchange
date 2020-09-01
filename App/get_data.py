@@ -35,7 +35,7 @@ def read_dataset(symbol, last_date):
         for blob in blobs:
             blob.delete()
         data = get_daily_dataset(symbol, last_date)
-        data = data.sort_values(by='timestamp').drop(columns='timestamp').to_numpy()
+        if data: data = data.sort_values(by='timestamp').drop(columns='timestamp').to_numpy()
     
     return data
 
@@ -61,7 +61,7 @@ def read_predictions(symbol, last_date):
     else:
         smooth_predictions = generate_smooth_predictions(symbol, last_date)
 
-    predictions = fromstring(re.sub('[\[\]\\n]', '', predictions).strip(), dtype=float, sep=' ').reshape(30,5)
-    smooth_predictions = fromstring(re.sub('[\[\]\\n]', '', smooth_predictions).strip(), dtype=float, sep=' ')
+    if predictions: predictions = fromstring(re.sub('[\[\]\\n]', '', predictions).strip(), dtype=float, sep=' ').reshape(30,5)
+    if smooth_predictions: smooth_predictions = fromstring(re.sub('[\[\]\\n]', '', smooth_predictions).strip(), dtype=float, sep=' ')
 
     return predictions, smooth_predictions

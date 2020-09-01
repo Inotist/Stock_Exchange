@@ -4,7 +4,9 @@ import requests
 from google.cloud import storage
 
 def generate_predictions(symbol, last_date):
-    predictions = requests.get(f"https://europe-west1-stock-exchange-predictions.cloudfunctions.net/make_predictions?symbol={symbol}&last_date={last_date}").text
+    predictions = requests.get(f"https://europe-west1-stock-exchange-predictions.cloudfunctions.net/make_predictions?symbol={symbol}&last_date={last_date}")
+    if predictions.status_code != 200: return None
+    predictions = predictions.text
 
     storage_client = storage.Client()
     bucket = storage_client.get_bucket(env["BUCKET"])
@@ -14,7 +16,9 @@ def generate_predictions(symbol, last_date):
     return predictions
 
 def generate_smooth_predictions(symbol, last_date):
-    smooth_predictions = requests.get(f"https://europe-west1-stock-exchange-predictions.cloudfunctions.net/smooth_predictions?symbol={symbol}&last_date={last_date}").text
+    smooth_predictions = requests.get(f"https://europe-west1-stock-exchange-predictions.cloudfunctions.net/smooth_predictions?symbol={symbol}&last_date={last_date}")
+    if smooth_predictions.status_code != 200: return None
+    smooth_predictions = smooth_predictions.text
 
     storage_client = storage.Client()
     bucket = storage_client.get_bucket(env["BUCKET"])

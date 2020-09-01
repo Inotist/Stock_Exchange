@@ -16,6 +16,7 @@ def get_daily_dataset(symbol, last_date):
     alpha_key = json.loads(keys)['alphavantage']
 
     csv = requests.get(f'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={symbol}&outputsize=full&apikey={alpha_key}&datatype=csv')
+    if csv.status_code != 200: return None
     data = read_csv(StringIO(csv.text))
 
     blob = bucket.blob(f'datasets/{symbol}-{last_date}.csv')
