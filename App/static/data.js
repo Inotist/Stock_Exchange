@@ -26,4 +26,4 @@ const frac = 5 // Fracción en la que se muestra el valor mínimo con respecto a
 var n = 0 // Inicializo el índice de los datos que se muestran en pantalla
 
 var legend_keys = ["Real Closing Prices", "Predicted Closing Prices", "Smooth Prediction"]
-var legend_colors = ["steelblue", "red", "yellow"]
+var legend_colors = ["steelblue", "#10B998", "#6044DC"]
