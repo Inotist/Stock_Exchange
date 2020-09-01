@@ -9,17 +9,17 @@
   stroke-width: 4px;
 }
 
-.linered {
-  fill: red;
+.linegreen {
+  fill: #10B998;
   fill-opacity: 0.2;
-  stroke: red;
+  stroke: #10B998;
   stroke-width: 4px;
 }
 
-.lineyellow {
-  fill: yellow;
+.linepurple {
+  fill: #6044DC;
   fill-opacity: 0.5;
-  stroke: yellow;
+  stroke: #6044DC;
   stroke-width: 4px;
 }
 

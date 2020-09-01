@@ -59,13 +59,13 @@ function drawChart(n, theme) {
 
   svg.append("path")
       .data([predDataFill])
-      .attr("class", "linered")
+      .attr("class", "linegreen")
       .attr("d", line);
 
   if (n == 0) {
     svg.append("path")
         .data([smoothPred])
-        .attr("class", "lineyellow")
+        .attr("class", "linepurple")
         .attr("d", line);
   }
 

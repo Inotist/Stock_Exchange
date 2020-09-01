@@ -1,11 +1,10 @@
-# Página finalmente descartada porque el botón de "siguiente" no lleva a un enlace y no he podido conseguir que el scraper avance.
+# Script finalmente descartado porque el botón de "siguiente" no lleva a un enlace.
 
 from google.cloud import storage
 from scrapy.crawler import CrawlerProcess
 from datetime import datetime
 
 import scrapy
-import json
 import tempfile
 
 TEMPORARY_FILE = tempfile.NamedTemporaryFile(delete=False, mode='w+t')
