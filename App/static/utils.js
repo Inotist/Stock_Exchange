@@ -1,5 +1,5 @@
 function formatArray(text) {
-	return text.replace(/\. /g,' ').replace(/\s+/g,' ').replace(/ ]/g, "]").replace(/ /g, ", ");
+	return text.replace(/\.\s+/g,' ').replace(/\s+/g,' ').replace(/ ]/g, "]").replace(/ /g, ", ");
 }
 
 function orderData(data, predictions, smooth_predictions) {
