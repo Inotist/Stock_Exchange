@@ -60,7 +60,7 @@ def activate(request):
 
     now = datetime.now()
     BUCKET_NAME = 'sep_files'
-    DESTINATION_FILE_NAME = f"datasets/news/{symbol}-{now.strftime('%Y/%m/%d/')}.csv"
+    DESTINATION_FILE_NAME = f"datasets/news/{symbol}-{now.strftime('%Y-%m-%d')}.csv"
     TEMPORARY_FILE.writelines("id|title|text|date\n")
     process = CrawlerProcess({
         'USER_AGENT': 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)'

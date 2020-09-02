@@ -8,13 +8,6 @@ from time import sleep
 import scrapy
 import tempfile
 
-from selenium.webdriver.chrome.options import Options
-
-chrome_options = Options()
-chrome_options.add_argument('--headless')
-chrome_options.add_argument('--no-sandbox')
-chrome_options.add_argument('--disable-dev-shm-usage')
-
 TEMPORARY_FILE = tempfile.NamedTemporaryFile(delete=False, mode='w+t')
     
 class NasdaqSpider(scrapy.Spider):
@@ -23,8 +16,7 @@ class NasdaqSpider(scrapy.Spider):
 
     def __init__(self, symbol="ibm"):
         self.symbol = symbol
-        self.driver = webdriver.Chrome('/usr/bin/google-chrome', chrome_options=chrome_options)
-        self.driver.get('https://www.google.nl/')
+        self.driver = webdriver.Firefox()
     
     # Elements
     news = ".quote-news-headlines__item a::attr(href)"
