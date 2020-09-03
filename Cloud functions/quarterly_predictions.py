@@ -1,6 +1,8 @@
 from os import environ as env
 
-from datetime import strptime, strftime, timedelta
+import requests
+from datetime import datetime
+from dateutil.relativedelta import *
 from google.cloud import storage
 import json
 from pandas import read_json, merge
@@ -38,7 +40,7 @@ def predict(model, symbol):
     if data is None: return None
 
     start_date = data['fiscalDateEnding'].values[0]
-    destination_date = strptime(start_date, '%Y-%m-%d') + timedelta(month=3)
+    destination_date = datetime.strptime(start_date, '%Y-%m-%d') + relativedelta(months=+3)
     destination_date = destination_date.strftime("%Y-%m-%d")
 
     data = data.drop(columns=['fiscalDateEnding', 'reportedCurrency_x', 'reportedCurrency_y', 'reportedCurrency'])
@@ -77,7 +79,7 @@ def get_last_data(symbol):
     keys = blob.download_as_string()
     alpha_key = json.loads(keys)['alphavantage']
 
-	income = requests.get(f'https://www.alphavantage.co/query?function=INCOME_STATEMENT&symbol={symbol}&outputsize=full&apikey={alpha_key}')
+    income = requests.get(f'https://www.alphavantage.co/query?function=INCOME_STATEMENT&symbol={symbol}&outputsize=full&apikey={alpha_key}')
     if income.status_code != 200: return None
     income = read_json(StringIO(json.dumps(json.loads(income.text)['quarterlyReports'])))
     
@@ -106,7 +108,7 @@ def build_model(**params):
     # Model definition
     model = Sequential()
     
-    model.add(Dense(params['density'], activation=params['activation']))
+    model.add(Dense(params['density'], input_shape=(98,), activation=params['activation']))
     
     density = params['density']//2
     while density >= 12:

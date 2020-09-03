@@ -1,6 +1,7 @@
 from os import environ as env
 
 import requests
+import json
 from google.cloud import storage
 
 def generate_predictions(symbol, last_date):
@@ -26,3 +27,17 @@ def generate_smooth_predictions(symbol, last_date):
     blob.upload_from_string(smooth_predictions, content_type='text/plain')
 
     return smooth_predictions
+
+def generate_quarterly_predictions(symbol):
+    prediction = requests.get(f"https://europe-west1-stock-exchange-predictions.cloudfunctions.net/quarterly_predictions?symbol={symbol}")
+    if prediction.status_code != 200: return None
+    prediction = prediction.text
+
+    destination_date = json.loads(prediction)['destination_date']
+
+    storage_client = storage.Client()
+    bucket = storage_client.get_bucket(env["BUCKET"])
+    blob = bucket.blob(f"predictions/quarterly-{symbol}-{destination_date}.json")
+    blob.upload_from_string(prediction, content_type='text/plain')
+
+    return prediction

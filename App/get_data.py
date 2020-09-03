@@ -1,6 +1,6 @@
 from os import environ as env
 
-from datetime import date, timedelta
+from datetime import datetime, date, timedelta
 from google.cloud import storage
 from pandas import read_csv
 from io import BytesIO
@@ -16,9 +16,9 @@ def get_data(symbol):
     last_date = last_date.strftime("%Y-%m-%d")
 
     data = read_dataset(symbol, last_date)[-30:,0]
-    predictions, smooth_predictions = read_predictions(symbol, last_date)
+    predictions, smooth_predictions, quarterly_prediction = read_predictions(symbol, last_date)
 
-    return data, predictions, smooth_predictions
+    return data, predictions, smooth_predictions, quarterly_prediction
 
 def read_dataset(symbol, last_date):
     storage_client = storage.Client()
@@ -42,6 +42,7 @@ def read_dataset(symbol, last_date):
 def read_predictions(symbol, last_date):
     storage_client = storage.Client()
     bucket = storage_client.get_bucket(env["BUCKET"])
+
     blob = bucket.blob(f'predictions/{symbol}-{last_date}.json')
 
     if blob.exists():
@@ -61,7 +62,21 @@ def read_predictions(symbol, last_date):
     else:
         smooth_predictions = generate_smooth_predictions(symbol, last_date)
 
+    blobs = bucket.list_blobs(prefix=f'predictions/quarterly-{symbol}')
+    updated = False
+    for blob in blobs:
+        if datetime.strptime(blob.name[-15:-5], '%Y-%m-%d') > datetime.strptime(last_date, '%Y-%m-%d'):
+            updated = True
+            break
+    if updated:
+        quarterly_prediction = blob.download_as_string()
+        quarterly_prediction = quarterly_prediction.decode()
+    else:
+        for blob in blobs:
+            blob.delete()
+        quarterly_prediction = generate_quarterly_predictions(symbol)
+
     if predictions is not None: predictions = fromstring(re.sub('[\[\]\\n]', '', predictions).strip(), dtype=float, sep=' ').reshape(30,5)
     if smooth_predictions is not None: smooth_predictions = fromstring(re.sub('[\[\]\\n]', '', smooth_predictions).strip(), dtype=float, sep=' ')
 
-    return predictions, smooth_predictions
+    return predictions, smooth_predictions, quarterly_prediction
