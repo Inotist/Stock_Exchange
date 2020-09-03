@@ -1,0 +1,7 @@
+{
+	"density": 72,
+	"activation": "softsign",
+	"shuffle": true,
+	"dropout": 0.2,
+	"optimizer": "adam"
+}
