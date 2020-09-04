@@ -1,7 +1,6 @@
 {
-	"density": 72,
-	"activation": "softsign",
+	"activation": "sigmoid",
+	"optimizer": "adamax",
 	"shuffle": true,
-	"dropout": 0.2,
-	"optimizer": "adam"
+	"density": 148
 }

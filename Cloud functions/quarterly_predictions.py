@@ -32,6 +32,7 @@ def start_point(request):
     model = build_model(**model_params)
 
     prediction = predict(model, symbol)
+    prediction = json.dumps(prediction)
 
     return prediction
 
@@ -67,8 +68,8 @@ def predict(model, symbol):
     predicted = y_normaliser.inverse_transform(model.predict(data))
 
     prediction = {"start_date": start_date,
-    			  "destination_date": destination_date,
-    			  "growth": predicted[0][0]}
+                  "destination_date": destination_date,
+                  "growth": str(predicted[0][0])}
 
     return prediction
 

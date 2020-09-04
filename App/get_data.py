@@ -5,6 +5,7 @@ from google.cloud import storage
 from pandas import read_csv
 from io import BytesIO
 from numpy import fromstring
+import json
 import re
 
 from get_daily_dataset import get_daily_dataset
@@ -78,5 +79,6 @@ def read_predictions(symbol, last_date):
 
     if predictions is not None: predictions = fromstring(re.sub('[\[\]\\n]', '', predictions).strip(), dtype=float, sep=' ').reshape(30,5)
     if smooth_predictions is not None: smooth_predictions = fromstring(re.sub('[\[\]\\n]', '', smooth_predictions).strip(), dtype=float, sep=' ')
+    if quarterly_prediction is not None: quarterly_prediction = json.loads(quarterly_prediction)
 
     return predictions, smooth_predictions, quarterly_prediction
