@@ -1,6 +1,11 @@
 {
-	"activation": "sigmoid",
-	"optimizer": "adamax",
-	"shuffle": true,
-	"density": 148
+	"twice": true,
+ 	"dropout": 0.2,
+ 	"shuffle": true,
+ 	"density": 54,
+ 	"activation": "relu",
+ 	"lstmsize": 4,
+ 	"merge_density": 176,
+ 	"optimizer": "adam",
+ 	"full_density": true
 }
