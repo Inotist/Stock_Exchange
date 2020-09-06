@@ -1,3 +1,5 @@
+# Obtengo los datos diarios de los movimientos para cada empresa en cuestión.
+
 from os import environ as env
 
 import requests

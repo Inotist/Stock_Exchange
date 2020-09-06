@@ -13,4 +13,3 @@ handlers:
 
 env_variables:
   BUCKET: "sep_files"
-  BACKLOOK: 92

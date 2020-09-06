@@ -1,3 +1,5 @@
+# Genero las predicciones usando Cloud Functions y las almaceno en el segmento indicando la fecha a la que corresponden
+
 from os import environ as env
 
 import requests

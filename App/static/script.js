@@ -1,14 +1,17 @@
+// La página carga inicialmente con el tema de visualización "oscuro", aunque el usuario puede cambiar entre "iluminado" y "oscuro" cuando quiera
 var theme = "dark";
 document.body.style.background = "#02021A";
 
+// Defino el tamaño de los ejes de "tiempo" y "valor" respecto al tamaño del svg
 const xScale = d3.scaleTime().range([0, width]);
-
 const yScale = d3.scaleLinear().range([height, 0]);
 
+// Defino los valores que se van a representar en cada segmento de los ejes
 const line = d3.line()
   .x(function(d) { return xScale(d[0]); })
   .y(function(d) { return yScale(d[1]); })
 
+// Defino el svg principal
 const svg = d3.select("body").append("svg")
   .attr('id', 'mainsvg')
   .attr("width", width + margin.left + margin.right)
@@ -16,8 +19,10 @@ const svg = d3.select("body").append("svg")
   .append("g")
   .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+// Dibujo el gráfico
 drawChart(n, theme);
 
+// Añado un evento para que el usuario pueda desplazarse hacia atrás y adelante en el tiempo por medio de la rueda del ratón
 document.getElementById("mainsvg").addEventListener("wheel", function (event) {
   if (event.deltaY > 0) { n -= 1; }
   else if (event.deltaY < 0) { n += 1; }
@@ -27,21 +32,25 @@ document.getElementById("mainsvg").addEventListener("wheel", function (event) {
 });
 
 function drawChart(n, theme) {
+  // Reinicio los elementos existentes para que el svg se actualice de una forma limpia
   svg.selectAll("path").remove();
   svg.selectAll("g").remove();
   svg.append("g")
   .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+  // Separo los datos en distintas variables a mi conveniencia
   workData = orderedData[n][0]
   predData = orderedData[n][1]
 
+  // Defino la longitud total de los datos que se van a mostrar
   dataLen = workData.concat(predData)
 
   if (n == 0) {
     smoothPred = orderedData[n][2]
     dataLen = dataLen.concat(smoothPred)
   }
-    
+  
+  // Asigno un dominio a los ejes en base a los valores obtenidos
   xScale.domain(d3.extent(dataLen, function(d) { return d[0]; }));
 
   datamax = d3.max(dataLen.map(function(d) { return d[1]; }))
@@ -49,9 +58,11 @@ function drawChart(n, theme) {
   datamin = datamin-(datamax-datamin)/frac
   yScale.domain([datamin, datamax]);
 
+  // Cierro las líneas para mostrar el gráfico con un relleno de color
   workDataFill = fillPath(workData.slice(), datamin)
   predDataFill = fillPath(predData.slice(), datamin)
 
+  // Agrego las distintas secuencias al gráfico
   svg.append("path")
     .data([workDataFill])
     .attr("class", "lineblue")
@@ -69,6 +80,7 @@ function drawChart(n, theme) {
       .attr("d", line);
   }
 
+  // Pinto el resto de elementos (leyenda y datos trimestrales) en base al tema visual escogido
   if (theme == "dark") {
     elements = document.getElementsByClassName("text");
     for (i = 0; i < elements.length; i++) {
@@ -168,6 +180,7 @@ function drawChart(n, theme) {
     })
     .attr("transform", "translate(-"+ width +","+ (height+margin.top) +")");
 
+  // Si el crecimiento es positivo, el porcentaje se muestra en verde. Si es negativo, se muestra en rojo.
   growthLegend.append("text").text(function (d) {return d;})
     .style("fill", function (d, i) {
       n = parseFloat(d.slice(0,d.length-1))

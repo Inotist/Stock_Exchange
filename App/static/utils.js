@@ -1,3 +1,4 @@
+// Limpio los datos
 function formatArray(text) {
 	return text.replace(/\.\s+/g,' ').replace(/\s+/g,' ').replace(/ ]/g, "]").replace(/ /g, ", ");
 }
@@ -5,6 +6,7 @@ function formatJson(text) {
 	return text.replace(/\'/g,'\"')
 }
 
+// Ordeno los datos y le asigno a cada valor su fecha correspondiente
 function orderData(data, predictions, smooth_predictions) {
 	weekday = new Date().getDay()
 	date = new Date()

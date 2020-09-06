@@ -1,3 +1,5 @@
+# Cloud Function que reconstruye el modelo utilizado para hacer predicciones sobre predicciones y carga los pesos adecuados usando los datos almacenados en el segmento
+
 from os import environ as env
 
 from google.cloud import storage
@@ -110,7 +112,7 @@ def build_model(**params):
     blob = bucket.blob(f"models/weights/{params['symbol']}_models/{params['tag']}.hdf5")
     temp_file = BytesIO()
 
-    # I had to do this to trick the check that load_weights does to the end of the file name.
+    # Este pequeño hack se me hizo necesario para sortear el check que "load_weights" le hace al nombre del archivo.
     def endswith(suffix, start=0, end=-1):
         return True
     temp_file.endswith = endswith

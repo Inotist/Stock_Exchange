@@ -1,3 +1,6 @@
+# Obtengo todos los datos que mostraré en la visualización.
+# Si la fecha en el nombre de los archivos está actualizada, se cargan del segmento. En caso contrario se llama a una función que se encarga de actualizar los datos.
+
 from os import environ as env
 
 from datetime import datetime, date, timedelta
