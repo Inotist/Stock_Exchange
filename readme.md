@@ -2,6 +2,8 @@
 &nbsp;
 ![#f03c15](https://placehold.it/15/f03c15/000000?text=+) <span style="color:red">Se mostrará en rojo aquellas ideas que no se han implementado por falta de tiempo.</span>
 
+##### [Enlace para visualizar la App](https://stock-exchange-predictions.ew.r.appspot.com/IBM)
+
 ## Idea general
 Crear una aplicación web mediante la que se puedan visualizar diferentes estimaciones sobre el crecimiento de las acciones de diferentes empresas en el mercado de NASDAQ.
 
