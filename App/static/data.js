@@ -5,7 +5,7 @@ const orderedData = orderData(data, predictions, smooth_predictions);
 
 const quarterly_prediction = JSON.parse(formatJson(document.getElementById("quarterly_prediction").innerHTML));
 var quarterly_info = ["",
-                      "QUARTERLY ESTIMATION",
+                      "Quarterly Estimation",
                       "",
                       "Last quarter report: "+quarterly_prediction["start_date"],
                       "Clossing value: "+quarterly_prediction["last_clossing"],

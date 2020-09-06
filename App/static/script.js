@@ -156,6 +156,16 @@ function drawChart(n, theme) {
     .attr("width", 10).attr("height", 10);
 
   quarterlyLegend.append("text").text(function (d) {return d;})
+    .style("font-weight", function (d, i) {
+      if (i == 1) {
+        return "bold"
+      }
+    })
+    .style("font-size", function (d, i) {
+      if (i == 1) {
+        return "24px"
+      }
+    })
     .attr("transform", "translate(-"+ width +","+ (height+margin.top) +")");
 
   growthLegend.append("text").text(function (d) {return d;})
