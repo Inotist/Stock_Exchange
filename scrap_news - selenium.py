@@ -1,4 +1,4 @@
-# Script adaptado con selenium para poder avanzar por las diferentes páginas.
+# Script adaptado con selenium para poder avanzar por las diferentes páginas y extraer suficientes noticias para el entrenamiento.
 
 from scrapy.crawler import CrawlerProcess
 from datetime import datetime

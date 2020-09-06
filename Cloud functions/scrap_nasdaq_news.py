@@ -1,4 +1,4 @@
-# Script finalmente descartado porque el botón de "siguiente" no lleva a un enlace.
+# Función sin implementar debido a que al final no he podido extraer datos suficientes para entrenar a un modelo que utilice estos datos.
 
 from google.cloud import storage
 from scrapy.crawler import CrawlerProcess
@@ -21,7 +21,6 @@ class NasdaqSpider(scrapy.Spider):
         self.start_urls = [f'https://www.nasdaq.com/market-activity/stocks/{symbol}/news-headlines']
 
     name = 'nasdaqspider'
-    cycles = 0
     ID = 1
     
     # Elements
@@ -35,11 +34,6 @@ class NasdaqSpider(scrapy.Spider):
     def parse(self, response):
         for new in response.css(self.news):
             yield response.follow(new, self.scrap)
-                
-        self.cycles += 1
-            
-        if self.cycles <= 100:
-            yield response.follow(response.css(self.follow)[0], self.parse)
 
     def scrap(self, response):
         title_text = response.css(self.title).extract_first()
