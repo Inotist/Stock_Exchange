@@ -73,6 +73,7 @@ def read_predictions(symbol, last_date):
         quarterly_prediction = blob.download_as_string()
         quarterly_prediction = quarterly_prediction.decode()
     else:
+        blobs = bucket.list_blobs(prefix=f'predictions/quarterly-{symbol}')
         for blob in blobs:
             blob.delete()
         quarterly_prediction = generate_quarterly_predictions(symbol)
