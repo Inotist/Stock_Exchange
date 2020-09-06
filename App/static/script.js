@@ -6,8 +6,8 @@ const xScale = d3.scaleTime().range([0, width]);
 const yScale = d3.scaleLinear().range([height, 0]);
 
 const line = d3.line()
-    .x(function(d) { return xScale(d[0]); })
-    .y(function(d) { return yScale(d[1]); })
+  .x(function(d) { return xScale(d[0]); })
+  .y(function(d) { return yScale(d[1]); })
 
 const svg = d3.select("body").append("svg")
   .attr('id', 'mainsvg')
@@ -53,20 +53,20 @@ function drawChart(n, theme) {
   predDataFill = fillPath(predData.slice(), datamin)
 
   svg.append("path")
-      .data([workDataFill])
-      .attr("class", "lineblue")
-      .attr("d", line);
+    .data([workDataFill])
+    .attr("class", "lineblue")
+    .attr("d", line);
 
   svg.append("path")
-      .data([predDataFill])
-      .attr("class", "linegreen")
-      .attr("d", line);
+    .data([predDataFill])
+    .attr("class", "linegreen")
+    .attr("d", line);
 
   if (n == 0) {
     svg.append("path")
-        .data([smoothPred])
-        .attr("class", "linepurple")
-        .attr("d", line);
+      .data([smoothPred])
+      .attr("class", "linepurple")
+      .attr("d", line);
   }
 
   if (theme == "dark") {
@@ -76,20 +76,39 @@ function drawChart(n, theme) {
     };
 
     svg.append("g")
-        .attr("class", "whitetext")
-        .attr("transform", "translate(0," + height + ")")
-        .call(d3.axisBottom(xScale));
+      .attr("class", "whitetext")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(xScale));
 
     svg.append("g")
-        .attr("class", "whitetext")
-        .call(d3.axisLeft(yScale));
+      .attr("class", "whitetext")
+      .call(d3.axisLeft(yScale));
 
-  var lineLegend = svg.selectAll(".lineLegend").data(legend_keys)
+    var lineLegend = svg.selectAll(".lineLegend").data(legend_keys)
       .enter().append("g")
       .attr("class","lineLegend")
       .attr("transform", function (d,i) {
-              return "translate(" + width + "," + (i*20)+")";
-          });
+        return "translate(" + width + "," + (i*20)+")";
+      });
+
+    var quarterlyLegend = svg.selectAll(".quarterlyInfo").data(quarterly_info)
+      .enter().append("g")
+      .attr("class","lineLegend")
+      .attr("transform", function (d,i) {
+        return "translate(" + width + "," + (i*20)+")";
+      });
+
+    var growthLegend = svg.selectAll(".quarterlyInfo").data(growth)
+      .enter().append("g")
+      .attr("class","lineLegend")
+      .attr("transform", function (d,i) {
+        if (i != 2) {
+          return "translate(" + width + "," + (i*20)+")";
+        }
+        else {
+          return "translate(" + (width+90) + "," + (i*30)+")";
+        }
+      });
   }
   else {
     elements = document.getElementsByClassName("text");
@@ -98,25 +117,66 @@ function drawChart(n, theme) {
     };
 
     svg.append("g")
-        .attr("transform", "translate(0," + height + ")")
-        .call(d3.axisBottom(xScale));
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(xScale));
 
     svg.append("g")
-        .call(d3.axisLeft(yScale));
+      .call(d3.axisLeft(yScale));
 
-  var lineLegend = svg.selectAll(".lineLegend").data(legend_keys)
+    var lineLegend = svg.selectAll(".lineLegend").data(legend_keys)
       .enter().append("g")
       .attr("transform", function (d,i) {
-              return "translate(" + width + "," + (i*20)+")";
-          });
+        return "translate(" + width + "," + (i*20)+")";
+      });
+
+    var quarterlyLegend = svg.selectAll(".quarterlyInfo").data(quarterly_info)
+      .enter().append("g")
+      .attr("transform", function (d,i) {
+        return "translate(" + width + "," + (i*20)+")";
+      });
+
+    var growthLegend = svg.selectAll(".quarterlyInfo").data(growth)
+      .enter().append("g")
+      .attr("transform", function (d,i) {
+        if (i != 2) {
+          return "translate(" + width + "," + (i*20)+")";
+        }
+        else {
+          return "translate(" + (width+90) + "," + (i*30)+")";
+        }
+      });
   }
 
   lineLegend.append("text").text(function (d) {return d;})
-      .attr("transform", "translate(15,9)");
+    .attr("transform", "translate(60,9)");
 
   lineLegend.append("rect")
-      .attr("fill", function (d, i) { return legend_colors[i]; })
-      .attr("width", 10).attr("height", 10);
+    .attr("fill", function (d, i) { return legend_colors[i]; })
+    .attr("transform", "translate(45,0)")
+    .attr("width", 10).attr("height", 10);
+
+  quarterlyLegend.append("text").text(function (d) {return d;})
+    .attr("transform", "translate(-"+ width +","+ (height+margin.top) +")");
+
+  growthLegend.append("text").text(function (d) {return d;})
+    .style("fill", function (d, i) {
+      n = parseFloat(d.slice(0,d.length-1))
+      if (i == 2 && n > 0) {
+        return "#10B998"
+      }
+      else if (i == 2 && n < 0) {
+        return "#E42727"
+      }
+    })
+    .style("font-size", function (d, i) {
+      if (i == 2) {
+        return "34px"
+      }
+      if (i == 5) {
+        return "12px"
+      }
+    })
+    .attr("transform", "translate(-"+ (width-400) +","+ (height+margin.top) +")");
 }
 
 function fillPath(path, min) {

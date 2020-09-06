@@ -2,6 +2,10 @@
 <meta charset="utf-8">
 <html>
 <head>
+  <div>
+    <button type="button" onclick="light()">Light</button>
+    <button type="button" onclick="dark()">Dark</button>
+  </div>
   <div class="text">
     <title>Stock Exchange Predictions</title>
   </div>
@@ -26,11 +30,6 @@
   <script src="{{ url_for('static', filename='utils.js') }}"></script>
   <script src="{{ url_for('static', filename='data.js') }}"></script>
   <script src="{{ url_for('static', filename='script.js') }}"></script>
-
-  <div>
-    <button type="button" onclick="light()">Light</button>
-    <button type="button" onclick="dark()">Dark</button>
-  </div>
   
 </body>
 </html>

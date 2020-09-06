@@ -1,6 +1,9 @@
 function formatArray(text) {
 	return text.replace(/\.\s+/g,' ').replace(/\s+/g,' ').replace(/ ]/g, "]").replace(/ /g, ", ");
 }
+function formatJson(text) {
+	return text.replace(/\'/g,'\"')
+}
 
 function orderData(data, predictions, smooth_predictions) {
 	weekday = new Date().getDay()

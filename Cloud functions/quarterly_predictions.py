@@ -41,6 +41,8 @@ def predict(model, symbol):
     time_data, nexus_data = get_last_data(symbol)
     if time_data is None: return None
 
+    last_clossing = nexus_data['clossingVal'].values[0]
+
     start_date = nexus_data['fiscalDateEnding'].values[0]
     nexus_data = nexus_data.drop(columns='fiscalDateEnding')
 
@@ -72,8 +74,9 @@ def predict(model, symbol):
     predicted = y_normaliser.inverse_transform(model.predict([time_data, nexus_data]))
 
     prediction = {"start_date": start_date,
+                  "last_clossing": last_clossing,
                   "destination_date": destination_date,
-                  "destination_value": str(predicted[0][0])}
+                  "destination_value": float(predicted[0][0])}
 
     return prediction
 

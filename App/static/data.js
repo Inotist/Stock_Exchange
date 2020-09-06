@@ -3,6 +3,23 @@ const predictions = JSON.parse(formatArray(document.getElementById("predictions"
 const smooth_predictions = JSON.parse(formatArray(document.getElementById("smooth_predictions").innerHTML));
 const orderedData = orderData(data, predictions, smooth_predictions);
 
+const quarterly_prediction = JSON.parse(formatJson(document.getElementById("quarterly_prediction").innerHTML));
+var quarterly_info = ["",
+                      "QUARTERLY ESTIMATION",
+                      "",
+                      "Last quarter report: "+quarterly_prediction["start_date"],
+                      "Clossing value: "+quarterly_prediction["last_clossing"],
+                      "",
+                      "Next quarter report: "+quarterly_prediction["destination_date"],
+                      "Estimated value: "+quarterly_prediction["destination_value"].toFixed(2)]
+
+var growth = ["",
+              "Estimated growth from today until "+quarterly_prediction["destination_date"]+": ",
+              (((quarterly_prediction["destination_value"]/data[data.length-1])*100)-100).toFixed(2)+"%",
+              "",
+              "",
+              "* This should be taken as an estimation for trend rather than actual growth"]
+
 orderedData.forEach(function (d) {
   d[0].forEach(function (f) {
     f[0] = parseTime(f[0]);
