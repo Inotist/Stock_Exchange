@@ -9,7 +9,7 @@ import json
 import re
 
 from get_daily_dataset import get_daily_dataset
-from generate_predictions import generate_predictions, generate_smooth_predictions
+from generate_predictions import generate_predictions, generate_smooth_predictions, generate_quarterly_predictions
 
 def get_data(symbol):
     today = date.today()
