@@ -8,10 +8,10 @@ app = Flask(__name__)
 @app.route('/<symbol>')
 def root(symbol=None):
 	if symbol:
-		data, predictions, smooth_predictions, quarterly_prediction = get_data(symbol)
+		data, predictions, smooth_predictions, quarterly_prediction, last_date = get_data(symbol)
 		if data is None or predictions is None or smooth_predictions is None or quarterly_prediction is None:
 			return render_template('error.html', symbol=symbol)
-		return render_template('graph.html', data=data, predictions=predictions, smooth_predictions=smooth_predictions, quarterly_prediction=quarterly_prediction, symbol=symbol)
+		return render_template('graph.html', data=data, predictions=predictions, smooth_predictions=smooth_predictions, quarterly_prediction=quarterly_prediction, last_date=last_date, symbol=symbol)
 
 	return render_template('index.html')
 

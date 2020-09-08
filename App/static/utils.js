@@ -7,11 +7,10 @@ function formatJson(text) {
 }
 
 // Ordeno los datos y le asigno a cada valor su fecha correspondiente
-function orderData(data, predictions, smooth_predictions) {
-	weekday = new Date().getDay()
-	date = new Date()
+function orderData(data, predictions, smooth_predictions, last_date) {
+	date = new Date(last_date)
+	weekday = date.getDay()
 	dateInUse = [weekday, date]
-	dateInUse = syncDateDown(dateInUse[0], dateInUse[1])
 
 	const dataProp = new Array();
 

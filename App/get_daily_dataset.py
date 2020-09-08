@@ -8,7 +8,7 @@ from io import StringIO
 from google.cloud import storage
 from pandas import read_csv
 
-def get_daily_dataset(symbol, last_date):
+def get_daily_dataset(symbol):
     storage_client = storage.Client()
     bucket = storage_client.get_bucket(env["BUCKET"])
 
@@ -21,7 +21,9 @@ def get_daily_dataset(symbol, last_date):
     if csv.status_code != 200: return None
     data = read_csv(StringIO(csv.text))
 
+    last_date = data.loc[0, 'timestamp']
+
     blob = bucket.blob(f'datasets/{symbol}-{last_date}.csv')
     blob.upload_from_string(csv.text, content_type='text/plain')
     
-    return data
+    return data, last_date

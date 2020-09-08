@@ -2,7 +2,8 @@
 const data = JSON.parse(formatArray(document.getElementById("data").innerHTML));
 const predictions = JSON.parse(formatArray(document.getElementById("predictions").innerHTML));
 const smooth_predictions = JSON.parse(formatArray(document.getElementById("smooth_predictions").innerHTML));
-const orderedData = orderData(data, predictions, smooth_predictions);
+const last_date = document.getElementById("last_date").innerHTML
+const orderedData = orderData(data, predictions, smooth_predictions, last_date);
 
 const quarterly_prediction = JSON.parse(formatJson(document.getElementById("quarterly_prediction").innerHTML));
 var quarterly_info = ["",

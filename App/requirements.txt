@@ -2,3 +2,5 @@ Flask
 google-cloud-storage
 pandas
 numpy
+fsspec
+gcsfs

@@ -6,7 +6,6 @@ from os import environ as env
 from datetime import datetime, date, timedelta
 from google.cloud import storage
 from pandas import read_csv
-from io import BytesIO
 from numpy import fromstring
 import json
 import re
@@ -17,31 +16,31 @@ from generate_predictions import generate_predictions, generate_smooth_predictio
 def get_data(symbol):
     today = date.today()
     last_date = today - timedelta(days=1)
+    if last_date.weekday() == 6: last_date -= timedelta(days=2)
+    if last_date.weekday() == 5: last_date -= timedelta(days=1)
     last_date = last_date.strftime("%Y-%m-%d")
 
-    data = read_dataset(symbol, last_date)[-30:,0]
+    data, last_date = read_dataset(symbol, last_date)
     predictions, smooth_predictions, quarterly_prediction = read_predictions(symbol, last_date)
 
-    return data, predictions, smooth_predictions, quarterly_prediction
+    return data, predictions, smooth_predictions, quarterly_prediction, last_date
 
 def read_dataset(symbol, last_date):
     storage_client = storage.Client()
     bucket = storage_client.get_bucket(env["BUCKET"])
     blob = bucket.blob(f'datasets/{symbol}-{last_date}.csv')
 
-    try:
-        temp_file = BytesIO()
-        blob.download_to_file(temp_file)
-        data = read_csv(temp_file)
-        data = data.sort_values(by='timestamp').drop(columns='timestamp').to_numpy()
-    except:
+    if blob.exists():
+        data = read_csv(f'gs://{env["BUCKET"]}/datasets/{symbol}-{last_date}.csv')
+    else:
         blobs = bucket.list_blobs(prefix=f'datasets/{symbol}')
         for blob in blobs:
             blob.delete()
-        data = get_daily_dataset(symbol, last_date)
-        if data is not None: data = data.sort_values(by='timestamp').drop(columns='timestamp').to_numpy()
+        data, last_date = get_daily_dataset(symbol)
+
+    if data is not None: data = data.sort_values(by='timestamp').drop(columns='timestamp').to_numpy()
     
-    return data
+    return data[-30:,0], last_date
 
 def read_predictions(symbol, last_date):
     storage_client = storage.Client()
